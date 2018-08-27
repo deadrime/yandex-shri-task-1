@@ -19,10 +19,20 @@ export function initMap(ymaps, containerId) {
     geoObjectBalloonContentLayout: getDetailsContentLayout(ymaps)
   });
 
-  objectManager.clusters.options.set('preset', 'islands#greenClusterIcons');
-
   loadList().then(data => {
     objectManager.add(data);
+    myMap.geoObjects.add(objectManager);
+  });
+
+  // cluster color
+  objectManager.clusters.events.add('add', e => {
+    let cluster = objectManager.clusters.getById(e.get('objectId'))
+    let objects = cluster.properties.geoObjects;
+    const defective = objects.filter(obj => !obj.isActive)
+    let color = defective.length > 0 ? defective.length === objects.length ? 'red' : 'yellow' : 'green'
+    objectManager.clusters.setClusterOptions(cluster.id, {
+      preset: `islands#${color}ClusterIcons`
+    });
   });
 
   // details
@@ -30,13 +40,14 @@ export function initMap(ymaps, containerId) {
     const objectId = event.get('objectId');
     const obj = objectManager.objects.getById(objectId);
 
-    objectManager.objects.balloon.open(objectId);
-
     if (!obj.properties.details) {
       loadDetails(objectId).then(data => {
-        obj.properties.details = data;
-        objectManager.objects.balloon.setData(obj);
+        console.log(data)
+        obj.properties.details = data
+        objectManager.objects.balloon.open(objectId);
       });
+    } else {
+      objectManager.objects.balloon.open(objectId);
     }
   });
 

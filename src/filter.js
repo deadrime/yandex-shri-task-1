@@ -14,7 +14,7 @@ export function createFilterControl(ymaps) {
     data: { content: 'Filter by state', title: 'Filter by state' },
     items: items,
     state: {
-      filters: items.reduce(function(filters, item) {
+      filters: items.reduce(function (filters, item) {
         filters[item.data.get('value')] = item.isSelected();
         return filters;
       }, {})

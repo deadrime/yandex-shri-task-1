@@ -3,6 +3,8 @@ body,
 #map {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .details-info {
@@ -27,6 +29,11 @@ body,
   border-radius: 0.2em;
   padding: .4em .8em;
   line-height: 1;
+}
+
+.details-coordinates {
+  font-size: 0.8em;
+  padding-bottom: .5em;
 }
 
 .details-state_active {
